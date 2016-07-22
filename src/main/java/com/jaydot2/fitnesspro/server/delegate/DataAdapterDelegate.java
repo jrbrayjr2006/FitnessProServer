@@ -1,5 +1,7 @@
 package com.jaydot2.fitnesspro.server.delegate;
 
+import com.jaydot2.fitnesspro.server.dao.DAO;
+import com.jaydot2.fitnesspro.server.model.User;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,5 +12,23 @@ import org.springframework.stereotype.Component;
  * Created by jamesbray on 7/3/16.
  */
 @Component("DataDelegate")
-public class DataAdapterDelegate {
+public class DataAdapterDelegate implements DAO {
+
+    @Override
+    public long getCount() {
+        //TODO
+        return 0;
+    }
+
+    @Override
+    public boolean createUser(User user) {
+        //TODO
+        return false;
+    }
+
+    @Override
+    public User getUser(String id) {
+        //TODO
+        return null;
+    }
 }

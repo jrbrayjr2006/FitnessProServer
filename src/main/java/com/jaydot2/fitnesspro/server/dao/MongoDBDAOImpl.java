@@ -24,6 +24,32 @@ public class MongoDBDAOImpl {
     private MongoDatabase database;
     private MongoCollection<Document> collection;
 
+
+    /**
+     * <p>
+     *     Get a count of records
+     * </p>
+     * @return
+     */
+    public String getCount() {
+        String result = "0";
+
+        return result;
+    }
+
+    /**
+     * <p>
+     *     Singleton pattern applied
+     * </p>
+     * @return
+     */
+    public static MongoDBDAOImpl getInstance() {
+        MongoDBDAOImpl dao = new MongoDBDAOImpl();
+        return dao;
+    }
+
+    private MongoDBDAOImpl() {}
+
     /**
      * <b>Description</b>
      * <p>
