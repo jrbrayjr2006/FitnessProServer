@@ -7,6 +7,8 @@ import com.jaydot2.fitnesspro.server.model.User;
  */
 public interface DAO {
 
+    public void setDatabaseConnection(String server, int port);
+
     public long getCount();
 
     public boolean createUser(User user);

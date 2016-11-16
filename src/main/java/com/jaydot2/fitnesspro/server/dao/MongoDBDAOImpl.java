@@ -20,7 +20,9 @@ public class MongoDBDAOImpl {
     private final static String TAG = "MongoDBDAOImpl";
     private Logger LOG = LogManager.getLogger(MongoDBDAOImpl.class);
 
-    private MongoClient mongoClient = new MongoClient("localhost", 27017);
+    private MongoClient mongoClient;
+    private String host = "localhost";
+    private int port = 27017;
     private MongoDatabase database;
     private MongoCollection<Document> collection;
 
@@ -33,6 +35,12 @@ public class MongoDBDAOImpl {
      */
     public String getCount() {
         String result = "0";
+        if(mongoClient == null) {
+            setDatabaseConnection(host,port);
+        }
+
+        MongoDatabase db = mongoClient.getDatabase("fitnesspro");
+        MongoCollection<Document> exerciseCollection = db.getCollection("exercises");
 
         return result;
     }
@@ -50,6 +58,15 @@ public class MongoDBDAOImpl {
 
     private MongoDBDAOImpl() {}
 
+
+    public void setDatabaseConnection(String server, int port) {
+        LOG.debug(TAG + " ::ENTER:: setDatabaseConnection(String,int)...");
+        if(mongoClient == null) {
+            mongoClient = new MongoClient(server,port);
+        }
+        LOG.debug(TAG + " ::EXIT:: setDatabaseConnection(String,int)...");
+    }
+
     /**
      * <b>Description</b>
      * <p>
@@ -61,8 +78,25 @@ public class MongoDBDAOImpl {
      */
     protected MongoCollection<Document> getCollection(String databaseName, String collectionName) {
         LOG.debug(TAG + " ::ENTER:: getCollection(String,String)...");
-        database = mongoClient.getDatabase(databaseName);
-        MongoCollection<Document> col = database.getCollection(collectionName);
+        MongoCollection<Document> col = null;
+        if(mongoClient == null) {
+            setDatabaseConnection(host,port);
+        }
+
+        if(databaseName != null) {
+            database = mongoClient.getDatabase(databaseName);
+        } else {
+            database = mongoClient.getDatabase("fitnesspro");
+        }
+
+        if(collectionName != null) {
+            col = database.getCollection(collectionName);
+        } else {
+            col = database.getCollection("exercises");
+        }
+
+        //TODO
+
         LOG.debug(TAG + " ::EXIT:: getCollection(String,String)...");
         return col;
     }
@@ -78,12 +112,61 @@ public class MongoDBDAOImpl {
     }
 
     /**
-     *
+     * Insert a new record into the database
      */
-    public void insertData() {
-        LOG.debug(TAG + " ::ENTER:: insertData()...");
+    public void insertData(String databaseName, String collectionName) {
+        LOG.debug(TAG + " ::ENTER:: insertData(String,String)...");
+        MongoCollection<Document> col = null;
+        if(mongoClient == null) {
+            setDatabaseConnection(host,port);
+        }
+
+        if(databaseName != null) {
+            database = mongoClient.getDatabase(databaseName);
+        } else {
+            database = mongoClient.getDatabase("fitnesspro");
+        }
+
+        if(collectionName != null) {
+            col = database.getCollection(collectionName);
+        } else {
+            col = database.getCollection("exercises");
+        }
+
+        Document record = new Document();  //TODO
         //TODO
-        collection = getCollection("test","users");
-        LOG.debug(TAG + " ::EXIT:: insertData()...");
+        col.insertOne(record);
+
+        LOG.debug(TAG + " ::EXIT:: insertData(String,String)...");
+    }
+
+    /**
+     * <p>
+     *     Delete a record from the database
+     * </p>
+     * @param objId
+     */
+    public void deleteRecord(String databaseName, String collectionName, String objId) {
+        LOG.debug(TAG + " ::ENTER:: deleteRecord(String,String,String)...");
+        MongoCollection<Document> col = null;
+        if(mongoClient == null) {
+            setDatabaseConnection(host,port);
+        }
+
+        if(databaseName != null) {
+            database = mongoClient.getDatabase(databaseName);
+        } else {
+            database = mongoClient.getDatabase("fitnesspro");
+        }
+
+        if(collectionName != null) {
+            col = database.getCollection(collectionName);
+        } else {
+            col = database.getCollection("exercises");
+        }
+
+        //TODO
+
+        LOG.debug(TAG + " ::EXIT:: deleteRecord(String,String,String)...");
     }
 }
