@@ -15,6 +15,11 @@ import org.springframework.stereotype.Component;
 public class DataAdapterDelegate implements DAO {
 
     @Override
+    public void setDatabaseConnection(String server, int port) {
+
+    }
+
+    @Override
     public long getCount() {
         //TODO
         return 0;
