@@ -2,17 +2,18 @@ package com.jaydot2.fitnesspro.server.controller;
 
 import com.jaydot2.fitnesspro.server.delegate.DataAdapterDelegate;
 import com.jaydot2.fitnesspro.server.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -24,10 +25,9 @@ import java.util.Map;
 @RestController
 @CrossOrigin
 @RequestMapping("/fitnesspro")
-@EnableAutoConfiguration
+@Slf4j
 public class CoreController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CoreController.class);
     private static final String SUCCESS = "success";
     private static final String FAILURE = "failure";
     private static final String TAG = "CoreController";
@@ -36,18 +36,21 @@ public class CoreController {
 
     private DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
+    public CoreController() {}
+
     @RequestMapping("/")
     @ResponseBody
     public String home() {
         return "Hello, Android";
     }
 
-    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    @GetMapping(value = "/count")
     @ResponseBody
-    public String getCount() {
+    public ResponseEntity<String> getCount() {
         String result = "0";
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
 
-        return result;
+        return responseEntity;
     }
 
     /**
@@ -55,43 +58,40 @@ public class CoreController {
      * <p>
      *     Call delegate to commit new user to the database
      * </p>
-     * @param firstname
-     * @param lastname
-     * @param username
+     * @param user
      * @return
      */
-    @RequestMapping(value = "/createuser/{firstname}/{lastname}/{username}", method = RequestMethod.POST)
+    @PostMapping( value = "/user", consumes = MediaType.APPLICATION_JSON_VALUE )
     @ResponseBody
-    public String createUser(@PathVariable("firstname") String firstname, @PathVariable("lastname") String lastname, @PathVariable("username") String username) {
-        logger.debug(TAG, "ENTER: addUser(String,String,String)...");
+    public ResponseEntity<Void> createUser(User user) {
+        log.debug(TAG, "ENTER: addUser(String,String,String)...");
         String result = FAILURE;
-        User user = new User();
-        user.setFirstname(firstname);
-        user.setLastname(lastname);
-        user.setUsername(username);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+        ResponseEntity<Void> responseEntity = new ResponseEntity<>(null, httpHeaders, HttpStatus.ACCEPTED);
         if(delegate.createUser(user)) {
-            result = SUCCESS;
+            return responseEntity;
         }
-        logger.debug(TAG, "EXIT: addUser(String,String,String)...");
-        return result;
+        log.debug(TAG, "EXIT: addUser(User user)...");
+        return responseEntity;
     }
 
     @RequestMapping(value = "/getuser", method = RequestMethod.GET)
     @ResponseBody
     public String getUser(String username) {
-        logger.debug(TAG, "::ENTER:: getUser(String)...");
+        log.debug(TAG, "::ENTER:: getUser(String)...");
         //TODO
-        logger.debug(TAG, "::EXIT:: getUser(String)...");
+        log.debug(TAG, "::EXIT:: getUser(String)...");
         return SUCCESS;
     }
 
     @RequestMapping(value = "/myfitness/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, String> getMyFitness(@PathVariable("id") String id) {
-        logger.debug(TAG, "::ENTER:: getMyFitness(String)...");
+        log.debug(TAG, "::ENTER:: getMyFitness(String)...");
         Map<String, String> result = new HashMap<String, String>();
         //TODO
-        logger.debug(TAG, "::EXIT:: getMyFitness(String)...");
+        log.debug(TAG, "::EXIT:: getMyFitness(String)...");
         return result;
     }
 
@@ -102,7 +102,4 @@ public class CoreController {
         return result;
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(CoreController.class, args);
-    }
 }
