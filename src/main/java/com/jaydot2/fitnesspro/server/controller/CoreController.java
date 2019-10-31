@@ -62,10 +62,8 @@ public class CoreController {
      * @return
      */
     @PostMapping( value = "/user", consumes = MediaType.APPLICATION_JSON_VALUE )
-    @ResponseBody
-    public ResponseEntity<Void> createUser(User user) {
+    public ResponseEntity<Void> createUser(@RequestBody User user) {
         log.debug(TAG, "ENTER: addUser(String,String,String)...");
-        String result = FAILURE;
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
         ResponseEntity<Void> responseEntity = new ResponseEntity<>(null, httpHeaders, HttpStatus.ACCEPTED);

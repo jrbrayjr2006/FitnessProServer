@@ -16,7 +16,7 @@
           "Content-Type": "application/json"
         },
         "body": {
-          "firstname": "",
+          "firstname": "John",
           "lastname": "",
           "username": ""
         }

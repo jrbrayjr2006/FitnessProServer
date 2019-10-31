@@ -3,7 +3,7 @@
     "name": "fitnesspro-app"
   },
   "producer": {
-    "name": "fitnesspro-service"
+    "name": "fitnessproservice"
   },
   "interactions": [
     {

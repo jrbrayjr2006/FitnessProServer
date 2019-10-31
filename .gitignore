@@ -2,6 +2,7 @@
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
+.idea/uiDesigner.xml
 ./idea/*
 
 ### Intellij+iml Patch ###
@@ -18,6 +19,10 @@ modules.xml
 .idea/encodings.xml
 .idea/kotlinc.xml
 .idea/vcs.xml
+
+# MacOS
+
+.DS_Store
 
 # Gradle:
 .idea/**/gradle.xml

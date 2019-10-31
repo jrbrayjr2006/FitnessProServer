@@ -1,5 +1,8 @@
 package com.jaydot2.fitnesspro.server.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jaydot2.fitnesspro.server.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,8 +34,13 @@ class CoreControllerTest {
         user.setFirstname("AnyFirst");
         user.setLastname("AnyLast");
         user.setUsername("anyuser");
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = objectMapper.writer().withDefaultPrettyPrinter();
+        String userJson = ow.writeValueAsString(user);
         // When
-        mockMvc.perform(post("/fitnesspro/user").contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/fitnesspro/user").contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(userJson))
                 .andDo(print())
                 .andExpect(status().isAccepted());
 
