@@ -3,13 +3,10 @@ package com.jaydot2.fitnesspro.server;
 import au.com.dius.pact.core.model.annotations.PactFolder;
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
+import au.com.dius.pact.provider.junit.loader.PactUrl;
 import au.com.dius.pact.provider.junit5.HttpTestTarget;
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.jaydot2.fitnesspro.server.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,13 +15,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest( webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = {"server.port=8888"})
-@Provider("fitnessproservice")
-@PactFolder("pact")
+@Provider("fitnesspro-service")
+//@PactFolder("pact")
+@PactUrl(urls = {"file:///Users/jbray/pact/fitnessPactContract.json"})
 public class FitnessProPactContractTest {
 
     @BeforeEach
     void setUp(PactVerificationContext context) {
-        context.setTarget(new HttpTestTarget("localhost", 8888, "/fitnesspro/user"));
+        context.setTarget(new HttpTestTarget("localhost", 8888, "/"));
     }
 
     @TestTemplate
@@ -33,11 +31,7 @@ public class FitnessProPactContractTest {
         context.verifyInteraction();
     }
 
-    @State( {"creates a new user", ""} )
+    @State({"creates a new user"})
     public void toCreateNewFitnessUser() throws Exception{
-        User user = new User();
-        user.setFirstname("John");
-        user.setLastname("Doe");
-        user.setUsername("johndoe");
     }
 }

@@ -28,7 +28,7 @@ class CoreControllerTest {
 
     @Test
     @DisplayName("Given a new user is created, when a request is sent, then return a status of accepted")
-    void whenCreateUserThenShouldReturnStatusOfAccepted() throws Exception {
+    void whenCreateUserThenShouldReturnStatusOfCreated() throws Exception {
         // Given
         User user = new User();
         user.setFirstname("AnyFirst");
@@ -42,7 +42,7 @@ class CoreControllerTest {
         mockMvc.perform(post("/fitnesspro/user").contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(userJson))
                 .andDo(print())
-                .andExpect(status().isAccepted());
+                .andExpect(status().isCreated());
 
         // Then
     }

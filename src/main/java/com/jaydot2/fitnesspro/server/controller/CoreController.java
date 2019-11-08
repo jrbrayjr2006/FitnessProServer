@@ -13,11 +13,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * Created by jamesbray on 7/3/16.
@@ -26,6 +30,7 @@ import java.util.Map;
 @CrossOrigin
 @RequestMapping("/fitnesspro")
 @Slf4j
+@Api(value = "CoreController", description = "An API for basic CRUD operations")
 public class CoreController {
 
     private static final String SUCCESS = "success";
@@ -38,14 +43,12 @@ public class CoreController {
 
     public CoreController() {}
 
-    @RequestMapping("/")
-    @ResponseBody
+    @GetMapping("/")
     public String home() {
         return "Hello, Android";
     }
 
     @GetMapping(value = "/count")
-    @ResponseBody
     public ResponseEntity<String> getCount() {
         String result = "0";
         ResponseEntity<String> responseEntity = new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
@@ -61,12 +64,17 @@ public class CoreController {
      * @param user
      * @return
      */
+    @ApiOperation(
+            value = "A brief description of this operation",
+            notes = "detailed notes on what this operation does"
+    )
+    @ApiResponses( value = {@ApiResponse(code=201, message="This user was created")})
     @PostMapping( value = "/user", consumes = MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<Void> createUser(@RequestBody User user) {
         log.debug(TAG, "ENTER: addUser(String,String,String)...");
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-        ResponseEntity<Void> responseEntity = new ResponseEntity<>(null, httpHeaders, HttpStatus.ACCEPTED);
+        ResponseEntity<Void> responseEntity = new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
         if(delegate.createUser(user)) {
             return responseEntity;
         }
@@ -74,17 +82,18 @@ public class CoreController {
         return responseEntity;
     }
 
-    @RequestMapping(value = "/getuser", method = RequestMethod.GET)
-    @ResponseBody
-    public String getUser(String username) {
+    @GetMapping(value = "/getuser")
+    public ResponseEntity<String> getUser(String username) {
         log.debug(TAG, "::ENTER:: getUser(String)...");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
         //TODO
         log.debug(TAG, "::EXIT:: getUser(String)...");
-        return SUCCESS;
+        return responseEntity;
     }
 
-    @RequestMapping(value = "/myfitness/{id}", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping(value = "/myfitness/{id}")
     public Map<String, String> getMyFitness(@PathVariable("id") String id) {
         log.debug(TAG, "::ENTER:: getMyFitness(String)...");
         Map<String, String> result = new HashMap<String, String>();
@@ -93,7 +102,7 @@ public class CoreController {
         return result;
     }
 
-    @RequestMapping(value="/test", method= RequestMethod.GET)
+    @GetMapping(value="/test")
     public Map<String,String> test() {
         Map<String,String> result = new HashMap<String, String>();
         result.put("testKey", "testValue");

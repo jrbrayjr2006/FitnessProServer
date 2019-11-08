@@ -1,13 +1,13 @@
 {
   "consumer": {
-    "name": "fitnesspro-app"
+    "name": "fitnesspro-ui"
   },
-  "producer": {
+  "provider": {
     "name": "fitnesspro-service"
   },
   "interactions": [
     {
-      "description": "A POST request to create a new user",
+      "description": "a request to POST a person",
       "providerState": "creates a new user",
       "request": {
         "method": "POST",
@@ -16,8 +16,8 @@
           "Content-Type": "application/json"
         },
         "body": {
-          "firstname": "",
-          "lastname": "",
+          "firstname": "Arthur",
+          "lastname": "Dent",
           "username": ""
         }
       },
@@ -26,7 +26,8 @@
         "headers": {
           "Content-Type": "application/json"
         },
-        "body": {},
+        "body": {
+        },
         "matchingRules": {
           "$.body": {
             "match": "type"
