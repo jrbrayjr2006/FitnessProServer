@@ -6,7 +6,10 @@ This is a Spring Boot application which provides RESTful services to perform CRU
 
 ## Testing
 
+Running the tests: `./mvnw test`
+
 ## References
 
 - [Spring Data MongoDB - Reference Documentation](https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#get-started:first-steps:spring)
 - [PACT](https://docs.pact.io/)
+- [Swagger API Documentation](https://springfox.github.io/springfox/docs/current/)
